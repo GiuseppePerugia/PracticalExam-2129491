@@ -1,0 +1,89 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Dashboard</h2>
+  <p class="text-center">Welcome {{user}}! Manage and view your enrolled courses.</p>
+
+  <!-- Logout Button -->
+  <div class="text-center mb-4">
+    <a href="/organiser/logout" class="btn btn-danger">Logout</a>
+  </div>
+
+  <!-- Button to add a new course (Admin only) -->
+  {{#isAdmin}}
+    <a href="/organiser/add-course" class="btn btn-success mb-3">Add New Course</a>
+  {{/isAdmin}}
+
+  <div class="row">
+    {{#courses}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{image}}" class="card-img-top" alt="{{title}} Image">
+          <div class="card-body">
+            <h5 class="card-title">{{title}}</h5>
+            <p class="card-text">{{description}}</p>
+            <p><strong>Category:</strong> {{category}}</p>
+            <p><strong>Price:</strong> £{{price}}</p>
+            <p><strong>Days:</strong> {{days}}</p>
+            <p><strong>Time:</strong> {{time}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+
+            {{#session.user}} <!-- Check if user is logged in -->
+              {{^isAdmin}} <!-- Only show for users, not admins -->
+                <a href="/courses/classes/{{_id}}" class="btn btn-primary">View Classes</a>
+              {{/isAdmin}}
+            {{/session.user}}
+
+            {{#enrolled}}
+              <span class="badge bg-success">Enrolled</span>
+            {{/enrolled}}
+
+            {{^enrolled}}
+              {{^isAdmin}}
+                <a href="/courses/enrol/{{_id}}" class="btn btn-primary">Enrol</a>
+              {{/isAdmin}}
+            {{/enrolled}}
+
+            <!-- Show "View Classes" only for users, not for admins -->
+            {{^isAdmin}}
+              <a href="/courses/classes/{{_id}}" class="btn btn-info">View Classes</a>
+            {{/isAdmin}}
+
+            <!-- Button to go back to courses, different for user and admin -->
+            {{#session.user}}
+              {{#isAdmin}}
+                <a href="/courses" class="btn btn-secondary mt-2">Back to Courses</a>
+              {{/isAdmin}}
+              {{^isAdmin}}
+                <a href="/organiser/dashboard" class="btn btn-secondary mt-2">Back to Dashboard</a>
+              {{/isAdmin}}
+            {{/session.user}}
+
+            <!-- Buttons for Admin: Edit, Delete Course, View Enrolments -->
+            {{#isAdmin}}
+              <a href="/organiser/edit-course/{{_id}}" class="btn btn-warning mt-2">Edit</a>
+              <a href="#" class="btn btn-danger mt-2" onclick="confirmDelete('/organiser/delete-course/{{_id}}')">Delete</a>
+              <a href="/organiser/enrolments/{{_id}}" class="btn btn-info mt-2">View Enrolments</a>
+            {{/isAdmin}}
+          </div>
+        </div>
+      </div>
+    {{/courses}}
+  </div>
+  
+  {{^courses.length}}
+    <p>No courses available at the moment.</p>
+  {{/courses.length}}
+</div>
+
+{{> footer}}
+
+<!-- JavaScript for confirmation before deletion -->
+<script>
+  function confirmDelete(url) {
+    const confirmAction = confirm("Are you sure you want to delete this course?");
+    if (confirmAction) {
+      window.location.href = url;
+    }
+  }
+</script>

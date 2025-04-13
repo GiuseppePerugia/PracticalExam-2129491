@@ -1,0 +1,35 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Classes for {{course.title}}</h2>
+  <p class="text-center">{{course.description}}</p>
+  <p class="text-center"><i>Enrol to the full course to have a <strong>10% discount</strong> to each class</i></p>
+
+  <div class="row">
+    {{#course.classes}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{day}} - {{date}}</h5>
+            <p class="card-text">{{time}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+            <p><strong>Price per Class:</strong> £{{pricePerClass}}</p>
+            
+            {{#session.user}} <!-- Check if user is logged in -->
+              <a href="/courses/enrol/{{course._id}}" class="btn btn-primary">Book</a>
+            {{/session.user}}
+            {{^session.user}} <!-- If not logged in, show the login redirect -->
+              <a href="/organiser/login" class="btn btn-primary">Login to Book</a>
+            {{/session.user}}
+          </div>
+        </div>
+      </div>
+    {{/course.classes}}
+  </div>
+
+  <p class="text-center mt-4">
+    <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+  </p>
+</div>
+
+{{> footer}}

@@ -1,0 +1,49 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Our Dance Courses</h2>
+  <p class="text-center">Choose from a variety of exciting dance classes!</p>
+
+  <!-- Button to go back to the homepage -->
+  <div class="text-center mb-4">
+    <a href="/" class="btn btn-secondary">Back to Homepage</a>
+  </div>
+
+  <!-- Loop through courses -->
+  <div class="row">
+    {{#courses}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{image}}" class="card-img-top" alt="{{title}} Image">
+          <div class="card-body">
+            <h5 class="card-title">{{title}}</h5>
+            <p class="card-text">{{description}}</p>
+            <p><strong>Category:</strong> {{category}}</p>
+            <p><i>Enrol to the full Course to have a 10% discount for each class</i></p>
+            <p><strong>Price:</strong> £{{price}}</p>
+            <p><strong>Days:</strong> {{days}}</p>
+            <p><strong>Time:</strong> {{time}}</p>
+            <p><strong>Location:</strong> {{location}}</p> <!-- New Location Field -->
+
+            {{#enrolled}}
+              <span class="badge bg-success">Enrolled</span>
+            {{/enrolled}}
+
+            {{^enrolled}}
+              <a href="/courses/enrol/{{_id}}" class="btn btn-primary">Enrol</a>
+            {{/enrolled}}
+
+            <a href="/courses/classes/{{_id}}" class="btn btn-info">View Classes</a>
+
+          </div>
+        </div>
+      </div>
+    {{/courses}}
+  </div>
+
+  {{^courses.length}}
+    <p>No courses available at the moment.</p>
+  {{/courses.length}}
+</div>
+
+{{> footer}}

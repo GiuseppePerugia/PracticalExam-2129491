@@ -1,0 +1,39 @@
+{{> header}}
+
+<h2>Enrolments for {{course.title}}</h2>
+
+{{#enrolments}}
+  <div class="card mb-3">
+    <div class="card-header">
+      <strong>User: {{user.username}}</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <p><strong>First Name:</strong></p>
+          <p>{{#user.firstName}}{{user.firstName}}{{/user.firstName}}{{^user.firstName}}Not Provided{{/user.firstName}}</p>
+        </div>
+        <div class="col-md-4">
+          <p><strong>Last Name:</strong></p>
+          <p>{{#user.lastName}}{{user.lastName}}{{/user.lastName}}{{^user.lastName}}Not Provided{{/user.lastName}}</p>
+        </div>
+        <div class="col-md-4">
+          <p><strong>Email:</strong></p>
+          <p>{{user.email}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/enrolments}}
+
+{{^enrolments.length}}
+  <p>No users are enrolled in this course yet.</p>
+{{/enrolments.length}}
+
+  <!-- Link to go back to the dashboard -->
+  <p class="text-center mt-3">
+    <a href="/organiser/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+  </p>
+</div>
+
+{{> footer}}

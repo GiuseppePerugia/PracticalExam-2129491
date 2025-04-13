@@ -1,0 +1,137 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center mb-4">Edit Course</h2>
+
+  {{#error}}
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+  {{/error}}
+
+  <form method="POST" action="/organiser/edit-course/{{course._id}}" class="needs-validation" novalidate>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="title" class="form-label">Course Title:</label>
+        <input type="text" class="form-control" name="title" value="{{course.title}}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="category" class="form-label">Category:</label>
+        <select name="category" class="form-select" required>
+          <option value="Urban" {{#categoryFlags.Urban}}selected{{/categoryFlags.Urban}}>Urban</option>
+          <option value="Classical" {{#categoryFlags.Classical}}selected{{/categoryFlags.Classical}}>Classical</option>
+          <option value="Latin" {{#categoryFlags.Latin}}selected{{/categoryFlags.Latin}}>Latin</option>
+          <option value="Jazz" {{#categoryFlags.Jazz}}selected{{/categoryFlags.Jazz}}>Jazz</option>
+          <option value="Modern" {{#categoryFlags.Modern}}selected{{/categoryFlags.Modern}}>Modern</option>
+          <option value="Pop" {{#categoryFlags.Pop}}selected{{/categoryFlags.Pop}}>Pop</option>
+          <option value="World" {{#categoryFlags.World}}selected{{/categoryFlags.World}}>World</option>
+          <option value="Rhythmic" {{#categoryFlags.Rhythmic}}selected{{/categoryFlags.Rhythmic}}>Rhythmic</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea name="description" class="form-control" rows="3" required>{{course.description}}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location:</label>
+      <select name="location" class="form-select" required>
+        <option value="Studio A, 10 example st., EH1 111, Edinburgh">Studio A, 10 example st., EH1 111, Edinburgh</option>
+        <option value="Studio B, 5 example avenue, G1 111, Glasgow">Studio B, 5 example avenue, G1 111, Glasgow</option>
+        <option value="Studio C, 15 example st., PA1 111, Pasley">Studio C, 15 example st., PA1 111, Pasley</option>
+      </select>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="price" class="form-label">Price (£):</label>
+        <input type="text" class="form-control" name="price" value="{{course.price}}" required>
+      </div>
+      <div class="col-md-6">
+        <label for="numberOfClasses" class="form-label">Number of Classes:</label>
+        <input type="number" class="form-control" name="numberOfClasses" required min="1">
+      </div>
+      <div class="col-md-6">
+        <label for="days" class="form-label">Days:</label>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Monday" {{#daysFlags.Monday}}checked{{/daysFlags.Monday}}>
+          <label class="form-check-label">Monday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Tuesday" {{#daysFlags.Tuesday}}checked{{/daysFlags.Tuesday}}>
+          <label class="form-check-label">Tuesday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Wednesday" {{#daysFlags.Wednesday}}checked{{/daysFlags.Wednesday}}>
+          <label class="form-check-label">Wednesday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Thursday" {{#daysFlags.Thursday}}checked{{/daysFlags.Thursday}}>
+          <label class="form-check-label">Thursday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Friday" {{#daysFlags.Friday}}checked{{/daysFlags.Friday}}>
+          <label class="form-check-label">Friday</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="startTime" class="form-label">Start Time:</label>
+        <select name="startTime" class="form-select" required>
+          <option value="05:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>05:00 PM</option>
+          <option value="05:30 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>05:30 PM</option>
+          <option value="06:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>06:00 PM</option>
+          <option value="06:30 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>06:30 PM</option>
+          <option value="07:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>07:00 PM</option>
+          <option value="07:30 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>07:30 PM</option>
+          <option value="08:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>08:00 PM</option>
+          <option value="08:30 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>08:30 PM</option>
+          <option value="09:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>09:00 PM</option>
+          <option value="09:30 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>09:30 PM</option>
+          <option value="10:00 pm" {{#timeFlags.start}}selected{{/timeFlags.start}}>10:00 PM</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="endTime" class="form-label">End Time:</label>
+        <select name="endTime" class="form-select" required>
+          <option value="05:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>05:00 PM</option>
+          <option value="05:30 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>05:30 PM</option>
+          <option value="06:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>06:00 PM</option>
+          <option value="06:30 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>06:30 PM</option>
+          <option value="07:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>07:00 PM</option>
+          <option value="07:30 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>07:30 PM</option>
+          <option value="08:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>08:00 PM</option>
+          <option value="08:30 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>08:30 PM</option>
+          <option value="09:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>09:00 PM</option>
+          <option value="09:30 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>09:30 PM</option>
+          <option value="10:00 pm" {{#timeFlags.end}}selected{{/timeFlags.end}}>10:00 PM</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Update Course</button>
+  </form>
+
+  <p class="text-center mt-3"><a href="/organiser/dashboard">Back to Dashboard</a></p>
+</div>
+
+{{> footer}}
+
+<!-- Optional Bootstrap 5 JavaScript (for validation and interactivity) -->
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })();
+</script>

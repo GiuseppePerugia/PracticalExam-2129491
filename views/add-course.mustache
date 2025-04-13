@@ -1,0 +1,130 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center mb-4">Add New Course</h2>
+
+  {{#error}}
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+  {{/error}}
+
+  <form method="POST" action="/organiser/add-course" class="needs-validation" novalidate>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="title" class="form-label">Course Title:</label>
+        <input type="text" class="form-control" name="title" required>
+      </div>
+      <div class="col-md-6">
+        <label for="category" class="form-label">Category:</label>
+        <select name="category" class="form-select" required>
+          <option value="Urban">Urban</option>
+          <option value="Classical">Classical</option>
+          <option value="Latin">Latin</option>
+          <option value="Jazz">Jazz</option>
+          <option value="Modern">Modern</option>
+          <option value="Pop">Pop</option>
+          <option value="World">World</option>
+          <option value="Rhythmic">Rhythmic</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea name="description" class="form-control" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location:</label>
+      <select name="location" class="form-select" required>
+        <option value="Studio A, 10 example st., EH1 111, Edinburgh">Studio A, 10 example st., EH1 111, Edinburgh</option>
+        <option value="Studio B, 5 example avenue, G1 111, Glasgow">Studio B, 5 example avenue, G1 111, Glasgow</option>
+        <option value="Studio C, 15 example st., PA1 111, Pasley">Studio C, 15 example st., PA1 111, Pasley</option>
+      </select>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="price" class="form-label">Price (£):</label>
+        <input type="text" class="form-control" name="price" required>
+      </div>
+      <div class="col-md-6">
+        <label for="days" class="form-label">Days:</label>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Monday">
+          <label class="form-check-label">Monday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Tuesday">
+          <label class="form-check-label">Tuesday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Wednesday">
+          <label class="form-check-label">Wednesday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Thursday">
+          <label class="form-check-label">Thursday</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="days" value="Friday">
+          <label class="form-check-label">Friday</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="startTime" class="form-label">Start Time:</label>
+        <select name="startTime" class="form-select" required>
+          <option value="05:00 pm">05:00 PM</option>
+          <option value="05:30 pm">05:30 PM</option>
+          <option value="06:00 pm">06:00 PM</option>
+          <option value="06:30 pm">06:30 PM</option>
+          <option value="07:00 pm">07:00 PM</option>
+          <option value="07:30 pm">07:30 PM</option>
+          <option value="08:00 pm">08:00 PM</option>
+          <option value="08:30 pm">08:30 PM</option>
+          <option value="09:00 pm">09:00 PM</option>
+          <option value="09:30 pm">09:30 PM</option>
+          <option value="10:00 pm">10:00 PM</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="endTime" class="form-label">End Time:</label>
+        <select name="endTime" class="form-select" required>
+          <option value="05:30 pm">05:30 PM</option>
+          <option value="06:00 pm">06:00 PM</option>
+          <option value="06:30 pm">06:30 PM</option>
+          <option value="07:00 pm">07:00 PM</option>
+          <option value="07:30 pm">07:30 PM</option>
+          <option value="08:00 pm">08:00 PM</option>
+          <option value="08:30 pm">08:30 PM</option>
+          <option value="09:00 pm">09:00 PM</option>
+          <option value="09:30 pm">09:30 PM</option>
+          <option value="10:00 pm">10:00 PM</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Add Course</button>
+  </form>
+
+  <p class="text-center mt-3"><a href="/organiser/dashboard">Back to Dashboard</a></p>
+</div>
+
+{{> footer}}
+
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })();
+</script>
