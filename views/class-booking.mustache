@@ -1,21 +1,30 @@
 {{> header}}
 
 <div class="container mt-5">
-  <h2 class="display-4 text-center">Book a Class for {{course.title}}</h2>
+  <h2 class="display-4 text-center">Book your class for {{course.title}}</h2>
   <p class="text-center">{{course.description}}</p>
 
-  <div class="row">
-    <form action="/courses/classes/{{classId}}/book" method="POST">
+  {{#alreadyBooked}}
+    <p class="text-center alert alert-success">You have already booked this class.</p>
+  {{/alreadyBooked}}
+
+  {{^alreadyBooked}}
+    <form action="/courses/classes/{{course._id}}/booking/{{classId}}" method="POST">
       <div class="form-group">
         <label for="userName">Your Name</label>
-        <input type="text" id="userName" name="userName" class="form-control" required />
+        <input type="text" class="form-control" id="userName" name="userName" required>
       </div>
-
-      <!-- Add other required fields here -->
-
-      <button type="submit" class="btn btn-primary">Book Now</button>
+      <div class="form-group">
+        <label for="userEmail">Your Email</label>
+        <input type="email" class="form-control" id="userEmail" name="userEmail" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Book</button>
     </form>
-  </div>
+  {{/alreadyBooked}}
+
+  <p class="text-center mt-4">
+    <a href="/courses/classes/{{course._id}}" class="btn btn-secondary">Back to Class</a>
+  </p>
 </div>
 
 {{> footer}}

@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const courseModel = require('../models/courseModel');
 const enrolmentModel = require('../models/enrolmentModel');
+const bookingModel = require('../models/bookingModel');
+
 
 // Home page route
 router.get('/', (req, res) => {
@@ -176,54 +178,83 @@ router.get('/courses/classes/:id', (req, res) => {
   });
 });
 
-// Handle class booking
-router.post('/courses/classes/:classId/book', (req, res) => {
-  const classId = req.params.classId;
+// Handle class booking (POST)
+router.post('/courses/classes/:courseId/booking/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
 
   if (!req.session.user) {
     return res.redirect('/organiser/login');
   }
 
-  // Check if the class exists
-  db.findOne({ "classes._id": classId }, (err, course) => {
-    if (err || !course) {
-      return res.status(404).send('Class not found');
+  // Logic to check if user is already booked for this class
+  bookingModel.getBookingsByClass(classId, (err, bookings) => {
+    if (err) {
+      return res.status(500).send('Error checking bookings');
     }
 
-    // Find the class within the course
-    const classToBook = course.classes.find(c => c._id === classId);
-    if (!classToBook) {
-      return res.status(404).send('Class not found');
+    const alreadyBooked = bookings.some(booking => booking.userEmail === req.session.user.email);
+    if (alreadyBooked) {
+      return res.redirect(`/courses/classes/${courseId}`); // Redirect if already booked
     }
 
-    // Register the class booking (example logic)
-    enrolmentModel.addEnrolment({
-      username: req.session.user,
-      courseId: course._id,
-      classId: classToBook._id
-    }, (err) => {
+    // Otherwise, proceed with booking logic
+    const booking = {
+      courseId,
+      classId,
+      userEmail: req.session.user.email, // Use the user's email from session
+      bookedAt: new Date()
+    };
+
+    // Add the booking to the database
+    bookingModel.addBooking(booking, (err, newBooking) => {
       if (err) {
         return res.status(500).send('Error booking the class');
       }
 
-      res.redirect(`/courses/classes/${classId}`); // Redirect back to class details page
+      res.redirect(`/courses/classes/${courseId}`); // Redirect back to the course's class page
     });
   });
 });
 
-// Book button should redirect to login if not logged in
-router.get('/courses/classes/:id/book', (req, res) => {
+// Route to display class booking form
+router.get('/courses/classes/:courseId/class-booking/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
+
+  // Check if user is logged in (check session)
   if (!req.session.user) {
     // If not logged in, redirect to login page
     return res.redirect('/organiser/login');
   }
 
-  const courseId = req.params.id;
+  // Get course details to display on the booking page
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
 
-  // Proceed with booking after checking user login
-  // Logic to enroll the user in the course or mark the class as booked can go here
+    // Check if user is already booked for this class
+    bookingModel.getBookingsByClass(classId, (err, bookings) => {
+      if (err) {
+        return res.status(500).send('Error checking bookings');
+      }
 
-  res.redirect(`/courses/classes/${courseId}`); // Redirect back to class page
+      const alreadyBooked = bookings.some(booking => booking.userEmail === req.session.user.email);
+      if (alreadyBooked) {
+        return res.render('class-booking', {
+          course,
+          classId,
+          alreadyBooked: true
+        });
+      }
+
+      // Otherwise, show the booking form for the class
+      res.render('class-booking', {
+        course,
+        classId,
+        alreadyBooked: false
+      });
+    });
+  });
 });
 
 module.exports = router;

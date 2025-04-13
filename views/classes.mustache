@@ -16,10 +16,16 @@
             <p><strong>Price per Class:</strong> £{{pricePerClass}}</p>
             
             {{#session.user}} <!-- Check if user is logged in -->
-              <a href="/courses/enrol/{{course._id}}" class="btn btn-primary">CLASSES Book</a>
+              {{#booked}} <!-- If already booked -->
+                <span class="btn btn-success">Already Booked</span>
+              {{/booked}}
+              {{^booked}} <!-- If not booked -->
+                <a href="/courses/classes/{{course._id}}/class-booking/{{_id}}" class="btn btn-primary">Book</a>
+              {{/booked}}
             {{/session.user}}
+
             {{^session.user}} <!-- If not logged in, show the login redirect -->
-              <a href="/organiser/login" class="btn btn-primary">Login to Book</a>
+              <a href="/organiser/login" class="btn btn-primary">Book</a>
             {{/session.user}}
           </div>
         </div>
