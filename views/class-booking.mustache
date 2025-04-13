@@ -1,0 +1,21 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Book a Class for {{course.title}}</h2>
+  <p class="text-center">{{course.description}}</p>
+
+  <div class="row">
+    <form action="/courses/classes/{{classId}}/book" method="POST">
+      <div class="form-group">
+        <label for="userName">Your Name</label>
+        <input type="text" id="userName" name="userName" class="form-control" required />
+      </div>
+
+      <!-- Add other required fields here -->
+
+      <button type="submit" class="btn btn-primary">Book Now</button>
+    </form>
+  </div>
+</div>
+
+{{> footer}}

@@ -176,6 +176,41 @@ router.get('/courses/classes/:id', (req, res) => {
   });
 });
 
+// Handle class booking
+router.post('/courses/classes/:classId/book', (req, res) => {
+  const classId = req.params.classId;
+
+  if (!req.session.user) {
+    return res.redirect('/organiser/login');
+  }
+
+  // Check if the class exists
+  db.findOne({ "classes._id": classId }, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Class not found');
+    }
+
+    // Find the class within the course
+    const classToBook = course.classes.find(c => c._id === classId);
+    if (!classToBook) {
+      return res.status(404).send('Class not found');
+    }
+
+    // Register the class booking (example logic)
+    enrolmentModel.addEnrolment({
+      username: req.session.user,
+      courseId: course._id,
+      classId: classToBook._id
+    }, (err) => {
+      if (err) {
+        return res.status(500).send('Error booking the class');
+      }
+
+      res.redirect(`/courses/classes/${classId}`); // Redirect back to class details page
+    });
+  });
+});
+
 // Book button should redirect to login if not logged in
 router.get('/courses/classes/:id/book', (req, res) => {
   if (!req.session.user) {
