@@ -34,7 +34,17 @@
   </div>
 
   <p class="text-center mt-4">
-    <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+    {{#session.user}} <!-- Check if user is logged in -->
+      {{#isAdmin}} <!-- If the user is admin -->
+        <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+      {{/isAdmin}}
+      {{^isAdmin}} <!-- If the user is not an admin -->
+        <a href="/organiser/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+      {{/isAdmin}}
+    {{/session.user}}
+    {{^session.user}} <!-- If not logged in, show the login redirect -->
+      <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+    {{/session.user}}
   </p>
 </div>
 

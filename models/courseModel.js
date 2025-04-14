@@ -154,7 +154,6 @@ function get(id, callback) {
   });
 }
 
-// Generate classes based on the course days, startDate, and endDate
 function generateClasses(course) {
   const startDate = new Date(course.startDate);
   const endDate = new Date(course.endDate);
@@ -163,17 +162,24 @@ function generateClasses(course) {
   let currentDate = startDate;
   let classCount = 0;
 
+  // Calculate price per class (with 10% added)
+  const price = parseFloat(course.price);  // Convert price to a number
+  const numberOfClasses = course.numberOfClasses;
+  let pricePerClass = (price / numberOfClasses) * 1.10; // Add 10% to the price per class
+  pricePerClass = pricePerClass.toFixed(2); // Format price per class with two decimal places
+
   while (currentDate <= endDate && classCount < course.numberOfClasses) {
     const dayOfWeek = currentDate.getDay();
     if (daysArray.includes(getDayName(dayOfWeek))) {
-      // Create class objects and set the courseId properly
+      // Create class objects and set the courseId and pricePerClass properly
       classes.push({
         _id: uuidv4(),  // Generate a unique ID for each class
         courseId: course._id,  // Link the class to the course
         day: getDayName(dayOfWeek),
         date: currentDate.toISOString().split('T')[0],  // Format date as 'yyyy-mm-dd'
         time: course.time,
-        location: course.location
+        location: course.location,
+        pricePerClass: pricePerClass  // Add price per class to each class
       });
       classCount++;
     }
