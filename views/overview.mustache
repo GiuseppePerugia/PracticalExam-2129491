@@ -11,21 +11,20 @@
 
   <h4 class="text-center">Our Courses</h4>
   <ul class="list-group mb-4">
-    <li class="list-group-item">
-      <strong>Salsa</strong> - Learn Latin rhythm and movement. (Latin)
-    </li>
-    <li class="list-group-item">
-      <strong>Hip Hop</strong> - Urban style dance techniques. (Urban)
-    </li>
-    <li class="list-group-item">
-      <strong>Ballet</strong> - Classical dance for balance and grace. (Classical)
-    </li>
-    <li class="list-group-item">
-      <strong>Jazz Funk</strong> - A mix of jazz, hip hop, and street styles. (Jazz)
-    </li>
-    <li class="list-group-item">
-      <strong>Contemporary</strong> - Expressive movement and floor work. (Modern)
-    </li>
+    {{#courses}}
+      <li class="list-group-item">
+        <strong>{{title}}</strong> - {{description}} ({{category}})
+        
+        <!-- Display Classes Underneath the Course -->
+        <ul>
+          {{#classes}}
+            <li>
+              <strong>{{day}} - {{date}}</strong>: {{time}} at {{location}}
+            </li>
+          {{/classes}}
+        </ul>
+      </li>
+    {{/courses}}
   </ul>
 
   <h4 class="text-center">Our Locations</h4>

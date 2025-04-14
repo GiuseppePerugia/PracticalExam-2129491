@@ -20,12 +20,18 @@ router.get('/overview', (req, res) => {
       return res.status(500).send('Error loading courses');
     }
 
-    // Debug log: Print out the courses to check if they are fetched correctly
-    console.log('Courses:', courses);
+    // Ensure each course has its classes populated
+    const coursesWithClasses = courses.map(course => {
+      // If course doesn't have classes, generate them
+      if (!course.classes) {
+        course.classes = generateClasses(course);  // You may want to use your generateClasses method here
+      }
+      return course;
+    });
 
-    // Check if courses exist and locations are available
+    // Render the overview page with courses and their classes
     res.render('overview', {
-      courses: courses || [],  // Pass courses if available, otherwise an empty array
+      courses: coursesWithClasses || [],  // Pass courses with classes, otherwise an empty array
     });
   });
 });
