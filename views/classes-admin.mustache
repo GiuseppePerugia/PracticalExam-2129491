@@ -1,0 +1,28 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Manage Classes for {{course.title}}</h2>
+  
+  <div class="row">
+    {{#course.classes}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{day}} - {{date}}</h5>
+            <p class="card-text">{{time}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+            
+            <!-- Admin button to edit the class -->
+            <a href="/organiser/classes/{{course._id}}/edit/{{_id}}" class="btn btn-primary">Edit Class</a>
+          </div>
+        </div>
+      </div>
+    {{/course.classes}}
+  </div>
+
+  <p class="text-center mt-4">
+    <a href="/organiser/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+  </p>
+</div>
+
+{{> footer}}

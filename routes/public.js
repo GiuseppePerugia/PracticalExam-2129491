@@ -263,4 +263,109 @@ router.get('/courses/classes/:courseId/class-booking/:classId', (req, res) => {
   });
 });
 
+// -- New impmenetations -------------
+// Admin route to view classes for editing
+router.get('/organiser/classes/:courseId', (req, res) => {
+  const courseId = req.params.courseId;
+
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login');
+  }
+
+  // Fetch course data along with classes
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
+
+    // Render classes-admin view with course data
+    res.render('classes-admin', {
+      course
+    });
+  });
+});
+
+// Admin route to edit a class (location, time, etc.)
+router.get('/organiser/classes/:courseId/edit/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
+
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login');
+  }
+
+  // Fetch course and class data
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
+
+    // Find the specific class in the course
+    const classToEdit = course.classes.find(cls => cls._id === classId);
+    if (!classToEdit) {
+      return res.status(404).send('Class not found');
+    }
+
+    // Render the admin edit page
+    res.render('class-edit', {
+      course,
+      class: classToEdit
+    });
+  });
+});
+
+// Admin route to save edited class details
+router.post('/organiser/classes/:courseId/edit/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
+  const { day, date, startTime, endTime, location, price } = req.body;  // Include missing fields
+
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login');
+  }
+
+  // Update class details in the course
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
+
+    const classToUpdate = course.classes.find(cls => cls._id === classId);
+    if (classToUpdate) {
+      // Update the class fields
+      classToUpdate.day = day;
+      classToUpdate.date = date;
+      classToUpdate.time = `${startTime} to ${endTime}`;  // Concatenate time to a single string
+      classToUpdate.location = location;
+      classToUpdate.price = price;
+
+      // Save the updated course with updated class details
+      courseModel.update(courseId, { classes: course.classes }, (err) => {
+        if (err) {
+          return res.status(500).send('Error saving changes');
+        }
+
+        // Redirect back to the class view after saving changes
+        res.redirect(`/organiser/classes/${courseId}`);  // Redirect to the specific class page
+      });
+    } else {
+      return res.status(404).send('Class not found');
+    }
+  });
+});
+
+// Edit class route
+router.post('/organiser/edit-class/:id', (req, res) => {
+  const classId = req.params.id;
+  const { day, date, time, location, price } = req.body;
+
+  // Update the class details in the database
+  bookingModel.updateClass(classId, { day, date, time, location, price }, (err, updatedClass) => {
+    if (err) {
+      console.log('Error updating class:', err);
+      return res.redirect(`/organiser/edit-class/${classId}`);
+    }
+
+    res.redirect(`/courses/classes/${updatedClass.courseId}`); // Redirect to the classes page of the course
+  });
+});
+
 module.exports = router;

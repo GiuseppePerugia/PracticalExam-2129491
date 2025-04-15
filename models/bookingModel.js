@@ -20,8 +20,16 @@ function getBookingsByUser(userEmail, callback) {
   db.find({ userEmail }, callback);
 }
 
+function updateClass(classId, updateData, callback) {
+  db.update({ _id: classId }, { $set: updateData }, {}, (err, numReplaced) => {
+    if (err) return callback(err);
+    callback(null, { ...updateData, _id: classId });
+  });
+}
+
 module.exports = {
   getBookingsByClass,
   addBooking,
-  getBookingsByUser
+  getBookingsByUser,
+  updateClass
 };

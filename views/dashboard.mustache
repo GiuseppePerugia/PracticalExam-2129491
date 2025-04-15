@@ -33,7 +33,11 @@
                 <a href="/courses/classes/{{_id}}" class="btn btn-primary">View Classes</a>
               {{/isAdmin}}
             {{/session.user}}
-
+            
+            {{#isAdmin}} <!-- Only show for users, not admins -->
+              <a href="/organiser/classes/{{_id}}" class="btn btn-primary">View Classes</a>
+            {{/isAdmin}}
+            
             {{#enrolled}}
               <span class="badge bg-success">Enrolled</span>
             {{/enrolled}}
