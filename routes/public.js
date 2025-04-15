@@ -263,7 +263,6 @@ router.get('/courses/classes/:courseId/class-booking/:classId', (req, res) => {
   });
 });
 
-// -- New impmenetations -------------
 // Admin route to view classes for editing
 router.get('/organiser/classes/:courseId', (req, res) => {
   const courseId = req.params.courseId;
@@ -367,5 +366,37 @@ router.post('/organiser/edit-class/:id', (req, res) => {
     res.redirect(`/courses/classes/${updatedClass.courseId}`); // Redirect to the classes page of the course
   });
 });
+
+// -- New impmenetations -------------------------------------------------------------------------------------------
+// Route to delete a class from a course
+router.post('/courses/classes/:courseId/delete/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
+
+  // Check if user is an admin
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login'); // Redirect if not admin
+  }
+
+  // Find the course by its ID
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
+
+    // Remove the class with the given classId
+    const updatedClasses = course.classes.filter(classItem => classItem._id !== classId);
+
+    // Update the course with the new list of classes
+    courseModel.update(courseId, { classes: updatedClasses }, (err) => {
+      if (err) {
+        return res.status(500).send('Error deleting class');
+      }
+
+      // Redirect back to the course's class page after deletion
+      res.redirect(`/organiser/classes/${courseId}`);
+    });
+  });
+});
+
 
 module.exports = router;
