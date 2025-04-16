@@ -13,14 +13,15 @@
             <p><strong>Location:</strong> {{location}}</p>
             <p><strong>Price per Class:</strong> £{{pricePerClass}}</p>
 
-            
             <!-- Admin button to edit the class -->
             <a href="/organiser/classes/{{course._id}}/edit/{{_id}}" class="btn btn-primary">Edit Class</a>
-            <form action="/courses/classes/{{course._id}}/generate-class-list/{{_id}}" method="POST">
-              <button type="submit" class="btn btn-info">Generate Class List</button>
-            </form>
+
+            <!-- Button to view the list of participants for this class -->
+            <a href="/organiser/classes/{{course._id}}/class-participants/{{_id}}" class="btn btn-info">View Class List</a>
+
             <form action="/courses/classes/{{course._id}}/delete/{{_id}}" method="POST">
               <button onclick="confirmDelete('{{course._id}}', '{{_id}}')" class="btn btn-danger">Delete Class</button>
+            </form>
           </div>
         </div>
       </div>

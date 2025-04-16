@@ -369,7 +369,6 @@ router.post('/organiser/edit-class/:id', (req, res) => {
   });
 });
 
-// -- New impmenetations -------------------------------------------------------------------------------------------
 // Route to delete a class from a course
 router.post('/courses/classes/:courseId/delete/:classId', (req, res) => {
   const { courseId, classId } = req.params;
@@ -396,6 +395,41 @@ router.post('/courses/classes/:courseId/delete/:classId', (req, res) => {
 
       // Redirect back to the course's class page after deletion
       res.redirect(`/organiser/classes/${courseId}`);
+    });
+  });
+});
+
+// -- New impmenetations -------------------------------------------------------------------------------------------
+
+// Route to view participants for a specific class
+router.get('/organiser/classes/:courseId/class-participants/:classId', (req, res) => {
+  const { courseId, classId } = req.params;
+
+  // Fetch the course and the class details
+  courseModel.get(courseId, (err, course) => {
+    if (err || !course) {
+      return res.status(404).send('Course not found');
+    }
+
+    // Find the specific class by classId
+    const selectedClass = course.classes.find(c => c._id === classId);
+
+    if (!selectedClass) {
+      return res.status(404).send('Class not found');
+    }
+
+    // Fetch the participants for the selected class
+    bookingModel.getBookingsByClass(classId, (err, bookings) => {
+      if (err) {
+        return res.status(500).send('Error fetching participants');
+      }
+
+      // Pass the participants and class details to the view
+      res.render('class-participants', {
+        courseTitle: course.title, // Use course title for display
+        classDetails: selectedClass, // Include the class details (day, date, time, etc.)
+        participants: bookings // List of participants who booked the class
+      });
     });
   });
 });
