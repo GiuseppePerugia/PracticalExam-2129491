@@ -315,7 +315,7 @@ router.get('/organiser/classes/:courseId/edit/:classId', (req, res) => {
 // Admin route to save edited class details
 router.post('/organiser/classes/:courseId/edit/:classId', (req, res) => {
   const { courseId, classId } = req.params;
-  const { day, date, startTime, endTime, location, price } = req.body;  // Include missing fields
+  const { day, date, startTime, endTime, location, pricePerClass } = req.body;  // Include missing fields
 
   if (!req.session.user || req.session.user !== 'admin') {
     return res.redirect('/organiser/login');
@@ -334,7 +334,7 @@ router.post('/organiser/classes/:courseId/edit/:classId', (req, res) => {
       classToUpdate.date = date;
       classToUpdate.time = `${startTime} to ${endTime}`;  // Concatenate time to a single string
       classToUpdate.location = location;
-      classToUpdate.price = price;
+      classToUpdate.pricePerClass = pricePerClass;
 
       // Save the updated course with updated class details
       courseModel.update(courseId, { classes: course.classes }, (err) => {
@@ -354,10 +354,10 @@ router.post('/organiser/classes/:courseId/edit/:classId', (req, res) => {
 // Edit class route
 router.post('/organiser/edit-class/:id', (req, res) => {
   const classId = req.params.id;
-  const { day, date, time, location, price } = req.body;
+  const { day, date, time, location, pricePerClass } = req.body;
 
   // Update the class details in the database
-  bookingModel.updateClass(classId, { day, date, time, location, price }, (err, updatedClass) => {
+  bookingModel.updateClass(classId, { day, date, time, location, pricePerClass }, (err, updatedClass) => {
     if (err) {
       console.log('Error updating class:', err);
       return res.redirect(`/organiser/edit-class/${classId}`);
