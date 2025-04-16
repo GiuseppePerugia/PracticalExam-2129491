@@ -93,13 +93,13 @@ router.get('/add-course', requireLogin, requireAdmin, (req, res) => {
 });
 
 router.post('/add-course', requireLogin, requireAdmin, (req, res) => {
-  const { title, description, category, price, days, startTime, endTime, location, startDate, endDate } = req.body;
+  const { title, description, category, price, days, startTime, endTime, location, startDate, endDate, numberOfClasses } = req.body;
 
-  // Ensure days is an array
-  const selectedDays = Array.isArray(days) ? days : [];
+  // Ensure days is always an array, even if no checkboxes are checked
+  const selectedDays = Array.isArray(days) ? days : (days ? [days] : []);
 
   // Ensure no empty fields
-  if (!title || !description || !category || !price || selectedDays.length === 0 || !startTime || !endTime || !location || !startDate || !endDate) {
+  if (!title || !description || !category || !price || selectedDays.length === 0 || !startTime || !endTime || !location || !startDate || !endDate || !numberOfClasses) {
     return res.render('add-course', { error: 'All fields are required.' });
   }
 
@@ -112,15 +112,16 @@ router.post('/add-course', requireLogin, requireAdmin, (req, res) => {
   // Convert the start and end date from string to Date object
   const startDateObj = new Date(startDate);
   const endDateObj = new Date(endDate);
-  
-  // Create the course
-  courseModel.create(title, description, price, selectedDays, time, category, image, location, startDateObj, endDateObj, (err) => {
+
+  // Pass numberOfClasses to create function
+  courseModel.create(title, description, price, selectedDays, time, category, image, location, numberOfClasses, startDateObj, endDateObj, (err) => {
     if (err) {
       return res.render('add-course', { error: 'Error creating course.' });
     }
     res.redirect('/organiser/dashboard');
   });
 });
+
 
 // Edit course route (Admin only)
 router.get('/edit-course/:id', requireLogin, requireAdmin, (req, res) => {

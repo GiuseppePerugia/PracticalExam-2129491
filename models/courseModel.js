@@ -155,9 +155,10 @@ function get(id, callback) {
 }
 
 function generateClasses(course) {
+
   const startDate = new Date(course.startDate);
   const endDate = new Date(course.endDate);
-  const daysArray = course.days.split(', '); // Split days into array
+  const daysArray = Array.isArray(course.days) ? course.days : course.days.split(', ');
   const classes = [];
   let currentDate = startDate;
   let classCount = 0;
