@@ -1,0 +1,60 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Manage Users</h2>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#users}}
+            <tr>
+              <td>{{username}}</td>
+              <td>{{email}}</td>
+              <td>{{firstName}}</td>
+              <td>{{lastName}}</td>
+              <td>
+                <a href="javascript:void(0);" class="btn btn-danger delete-btn" data-user-id="{{_id}}">Delete</a>
+              </td>
+            </tr>
+          {{/users}}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-center mt-3"><a href="/organiser/dashboard">Back to Dashboard</a></p>
+  </div>
+</div>
+
+{{> footer}}
+
+<script>
+  // Add event listeners to delete buttons
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const userId = e.target.getAttribute('data-user-id');
+
+      // Check if the user is the admin, prevent deletion if it's the admin
+      const adminUserId = '{{adminUserId}}'; // This is passed from the backend
+
+      if (userId === adminUserId) {
+        // Show a simple pop-up with the message and no confirmation
+        alert("You can't delete the admin.");
+        return;  // Prevent the rest of the code from running
+      }
+
+      // Confirm with the user if they want to delete
+      if (confirm('Are you sure you want to delete this user?')) {
+        // Redirect to the delete user route
+        window.location.href = '/organiser/delete-user/' + userId;
+      }
+    });
+  });
+</script>

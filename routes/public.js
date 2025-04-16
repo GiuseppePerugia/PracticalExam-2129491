@@ -4,6 +4,9 @@ const router = express.Router();
 const courseModel = require('../models/courseModel');
 const enrolmentModel = require('../models/enrolmentModel');
 const bookingModel = require('../models/bookingModel');
+const Datastore = require('nedb');
+const path = require('path');
+
 
 
 // Home page route
@@ -399,8 +402,6 @@ router.post('/courses/classes/:courseId/delete/:classId', (req, res) => {
   });
 });
 
-// -- New impmenetations -------------------------------------------------------------------------------------------
-
 // Route to view participants for a specific class
 router.get('/organiser/classes/:courseId/class-participants/:classId', (req, res) => {
   const { courseId, classId } = req.params;
@@ -431,6 +432,56 @@ router.get('/organiser/classes/:courseId/class-participants/:classId', (req, res
         participants: bookings // List of participants who booked the class
       });
     });
+  });
+});
+
+// -- New impmenetations -------------------------------------------------------------------------------------------
+
+// Route to show all users for admin
+router.get('/organiser/manage-users', (req, res) => {
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login');
+  }
+
+  const usersDb = new Datastore({ filename: path.join(__dirname, '../db/users.db'), autoload: true });
+
+  usersDb.find({}, (err, users) => {
+    if (err) {
+      console.error('Error fetching users:', err);
+      return res.status(500).send('Error fetching users');
+    }
+
+    // Get the admin's user ID from the session
+    const adminUserId = req.session.user === 'admin' ? 'adminUserId' : null;
+
+    res.render('manage-users', {
+      users: users || [],
+      isAdmin: req.session.user === 'admin',  // Pass isAdmin flag to the template
+      adminUserId: adminUserId  // Pass admin user ID to template
+    });
+  });
+});
+
+// Route to delete a user by ID
+router.get('/organiser/delete-user/:userId', (req, res) => {
+  if (!req.session.user || req.session.user !== 'admin') { // Ensure only admins can delete users
+    return res.redirect('/organiser/login');
+  }
+
+  const userId = req.params.userId;
+
+  // Fetch the users database
+  const usersDb = new Datastore({ filename: path.join(__dirname, '../db/users.db'), autoload: true });
+
+  // Delete user from the database
+  usersDb.remove({ _id: userId }, {}, (err, numRemoved) => {
+    if (err || numRemoved === 0) {
+      console.error('Error deleting user:', err);
+      return res.status(500).send('Error deleting user');
+    }
+
+    // After deletion, redirect to the manage users page
+    res.redirect('/organiser/manage-users');
   });
 });
 
