@@ -187,6 +187,7 @@ router.get('/courses/classes/:id', (req, res) => {
 // Handle class booking (POST)
 router.post('/courses/classes/:courseId/booking/:classId', (req, res) => {
   const { courseId, classId } = req.params;
+  const { username, email } = req.body; // Get username and email from the form data
 
   if (!req.session.user) {
     return res.redirect('/organiser/login');
@@ -207,7 +208,8 @@ router.post('/courses/classes/:courseId/booking/:classId', (req, res) => {
     const booking = {
       courseId,
       classId,
-      userEmail: req.session.user.email, // Use the user's email from session
+      userName: username,
+      userEmail: email, // Use the user's email from session
       bookedAt: new Date()
     };
 
