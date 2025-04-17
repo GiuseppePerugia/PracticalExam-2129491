@@ -1,6 +1,6 @@
 # Full public repo at https://github.com/GiuseppePerugia/PracticalExam-2129491
 
-# Item missing when connecting to the submission
+# Some Items are missing when connecting to the submission link
 
 # Dance Class Management System
 
