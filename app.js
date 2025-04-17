@@ -45,7 +45,8 @@ app.use(bodyParser.json()); // For parsing application/json
 app.use(session({
   secret: 'supersecretkey',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
 
 // Example middleware to expose user session to views

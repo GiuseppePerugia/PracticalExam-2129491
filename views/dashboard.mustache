@@ -43,11 +43,7 @@
                 <a href="/courses/classes/{{_id}}" class="btn btn-primary">View Classes</a>
               {{/isAdmin}}
             {{/session.user}}
-            
-            {{#isAdmin}} <!-- Only show for users, not admins -->
-              <a href="/organiser/classes/{{_id}}" class="btn btn-primary">View Classes</a>
-            {{/isAdmin}}
-            
+                     
             {{#enrolled}}
               <span class="badge bg-success">Enrolled</span>
             {{/enrolled}}
@@ -78,6 +74,7 @@
               <a href="/organiser/edit-course/{{_id}}" class="btn btn-warning mt-2">Edit</a>
               <a href="#" class="btn btn-danger mt-2" onclick="confirmDelete('/organiser/delete-course/{{_id}}')">Delete</a>
               <a href="/organiser/enrolments/{{_id}}" class="btn btn-info mt-2">View Enrolments</a>
+              <a href="/organiser/classes/{{_id}}" class="btn btn-info  mt-2">View Classes</a>
             {{/isAdmin}}
           </div>
         </div>
