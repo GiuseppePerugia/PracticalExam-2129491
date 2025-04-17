@@ -1,3 +1,7 @@
+# Full public repo at https://github.com/GiuseppePerugia/PracticalExam-2129491
+
+# Item missing when connecting to the submission
+
 # Dance Class Management System
 
 This project is a web application that allows users to view, book, and enroll in various dance courses, book classes as well as for administrators to manage users, oraganisers, classes and courses. The backend is powered by Node.js, and it utilizes several databases to handle different aspects of the system.
