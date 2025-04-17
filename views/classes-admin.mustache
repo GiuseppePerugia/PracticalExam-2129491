@@ -19,8 +19,9 @@
             <!-- Button to view the list of participants for this class -->
             <a href="/organiser/classes/{{course._id}}/class-participants/{{_id}}" class="btn btn-info">View Class List</a>
 
-            <form action="/courses/classes/{{course._id}}/delete/{{_id}}" method="POST">
-              <button onclick="confirmDelete('{{course._id}}', '{{_id}}')" class="btn btn-danger">Delete Class</button>
+            <!-- Form for deleting the class -->
+            <form action="/courses/classes/{{course._id}}/delete/{{_id}}" method="POST" id="delete-form-{{_id}}">
+              <button type="button" onclick="confirmDelete('{{course._id}}', '{{_id}}')" class="btn btn-danger">Delete Class</button>
             </form>
           </div>
         </div>
@@ -34,3 +35,15 @@
 </div>
 
 {{> footer}}
+
+<script>
+  function confirmDelete(courseId, classId) {
+    // Confirm if the user wants to delete the class
+    const confirmation = window.confirm("Are you sure you want to delete this class?");
+    
+    if (confirmation) {
+      // If confirmed, submit the form
+      document.getElementById('delete-form-' + classId).submit();
+    }
+  }
+</script>

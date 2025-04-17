@@ -6,7 +6,7 @@ const enrolmentModel = require('../models/enrolmentModel');
 const bookingModel = require('../models/bookingModel');
 const Datastore = require('nedb');
 const path = require('path');
-
+const organiserModel = require('../models/organiserModel');
 
 
 // Home page route
@@ -435,8 +435,6 @@ router.get('/organiser/classes/:courseId/class-participants/:classId', (req, res
   });
 });
 
-// -- New impmenetations -------------------------------------------------------------------------------------------
-
 // Route to show all users for admin
 router.get('/organiser/manage-users', (req, res) => {
   if (!req.session.user || req.session.user !== 'admin') {
@@ -485,5 +483,50 @@ router.get('/organiser/delete-user/:userId', (req, res) => {
   });
 });
 
+// -- New impmenetations -------------------------------------------------------------------------------------------
 
+// Show organiser management page
+router.get('/organisers', (req, res) => {
+  // Ensure the user is an admin or has permission to manage organisers
+  if (!req.session.user || req.session.user !== 'admin') {
+    return res.redirect('/organiser/login');
+  }
+
+  // Fetch all organisers from the database
+  organiserModel.getAllOrganisers((err, organisers) => {
+    if (err) {
+      console.error('Error loading organisers:', err);
+      return res.status(500).send('Error loading organisers');
+    }
+    res.render('organisers', { organisers });
+  });
+});
+
+// Add a new organiser
+router.post('/organisers/add', (req, res) => {
+  const { name, role, courses } = req.body;
+
+  // Add the new organiser to the database
+  organiserModel.addOrganiser(name, role, courses, (err, newOrganiser) => {
+    if (err) {
+      console.error('Error adding organiser:', err);
+      return res.status(500).send('Error adding organiser');
+    }
+    res.redirect('/organisers');  // Redirect back to the organiser page
+  });
+});
+
+// Delete an organiser
+router.post('/organisers/delete/:id', (req, res) => {
+  const organiserId = req.params.id;
+
+  // Delete the organiser from the database
+  organiserModel.deleteOrganiser(organiserId, (err) => {
+    if (err) {
+      console.error('Error deleting organiser:', err);
+      return res.status(500).send('Error deleting organiser');
+    }
+    res.redirect('/organisers');  // Redirect back to the organiser page
+  });
+});
 module.exports = router;

@@ -47,7 +47,8 @@
       </div>
       <div class="col-md-6">
         <label for="numberOfClasses" class="form-label">Number of Classes:</label>
-        <input type="number" class="form-control" name="numberOfClasses" required min="1">
+        <input type="number" class="form-control" name="numberOfClasses" value="{{course.numberOfClasses}}" required min="1">
+
       </div>
       <div class="col-md-6">
         <label for="days" class="form-label">Days:</label>
@@ -73,7 +74,16 @@
         </div>
       </div>
     </div>
-
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="startDate" class="form-label">Start Date:</label>
+        <input type="date" class="form-control" name="startDate" required>
+      </div>
+      <div class="col-md-6">
+        <label for="endDate" class="form-label">End Date:</label>
+        <input type="date" class="form-control" name="endDate" required>
+      </div>
+    </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="startTime" class="form-label">Start Time:</label>

@@ -20,6 +20,10 @@
     </div>
   {{/isAdmin}}
   
+  {{#isAdmin}} <!-- Ensure only admins can see this button -->
+    <a href="/organisers" class="btn btn-primary">Manage Organisers</a>
+  {{/isAdmin}}
+  
   <div class="row">
     {{#courses}}
       <div class="col-md-4 mb-4">

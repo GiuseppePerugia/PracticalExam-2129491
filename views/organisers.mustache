@@ -1,0 +1,65 @@
+{{> header}}
+
+<div class="container mt-5">
+  <h2 class="display-4 text-center">Manage Organisers</h2>
+
+  <!-- Form to add a new organiser -->
+  <form action="/organisers/add" method="POST">
+    <div class="form-group">
+      <label for="name">Organiser Name</label>
+      <input type="text" id="name" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="role">Role</label>
+      <select id="role" name="role" class="form-control" required>
+        <option value="Course Organiser">Course Organiser</option>
+        <option value="Class Organiser">Class Organiser</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="courses">Courses (comma separated)</label>
+      <input type="text" id="courses" name="courses" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Organiser</button>
+  </form>
+
+  <!-- List existing organisers -->
+  <h3 class="mt-5">Existing Organisers</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Assigned Courses</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#organisers}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{role}}</td>
+          <td>{{courses}}</td>
+          <td>
+            <form action="/organisers/delete/{{_id}}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {{/organisers}}
+    </tbody>
+  </table>
+
+  <p class="text-center mt-4">
+    <a href="/organiser/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+  </p>
+</div>
+
+{{> footer}}
+
+<script>
+  // JavaScript function to confirm deletion
+  function confirmDelete() {
+    return confirm('Are you sure you want to delete this organiser?');
+  }
+</script>

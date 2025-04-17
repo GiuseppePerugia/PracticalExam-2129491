@@ -174,7 +174,10 @@ router.get('/edit-course/:id', requireLogin, requireAdmin, (req, res) => {
 
 router.post('/edit-course/:id', requireLogin, requireAdmin, (req, res) => {
   const courseId = req.params.id;
-  const { title, description, category, price, days, startTime, endTime, location, startDate, endDate } = req.body;
+  const { title, description, category, price, days, startTime, endTime, location, startDate, endDate, numberOfClasses } = req.body;
+
+  // Log the form data to check if 'numberOfClasses' is being passed correctly
+  console.log('Form data:', req.body);  // Check if 'numberOfClasses' is in the request
 
   // Combine start time and end time
   const time = `${startTime} to ${endTime}`;
@@ -186,7 +189,20 @@ router.post('/edit-course/:id', requireLogin, requireAdmin, (req, res) => {
   const startDateObj = new Date(startDate);
   const endDateObj = new Date(endDate);
 
-  courseModel.update(courseId, { title, description, price, days, time, category, image, location, startDate: startDateObj, endDate: endDateObj }, (err) => {
+  // Update course with the new data, including 'numberOfClasses'
+  courseModel.update(courseId, { 
+    title, 
+    description, 
+    price, 
+    days, 
+    time, 
+    category, 
+    image, 
+    location, 
+    startDate: startDateObj, 
+    endDate: endDateObj, 
+    numberOfClasses 
+  }, (err) => {
     if (err) {
       return res.status(500).send('Error updating course');
     }
