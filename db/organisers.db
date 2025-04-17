@@ -1,5 +1,3 @@
-{"name":"Giuseppe Perugia","role":"Organiser","courses":["courseId3","courseId4"],"_id":"ONAGQkWcTHNGcBB5"}
 {"name":"Jane Smith","role":"Organiser","courses":["courseId3","courseId4"],"_id":"QONZ5OMlWySvuLYI"}
-{"name":"John Doe","role":"Organiser","courses":["courseId1","courseId2"],"_id":"u7jQz0LjB2psvJiu"}
 {"name":"Giuseppe Perugia","role":"Course Organiser","courses":"Hip Hop","_id":"iJFAUR8G7FC9X2mY"}
-{"$$deleted":true,"_id":"ONAGQkWcTHNGcBB5"}
+{"name":"John Doe","role":"Organiser","courses":["courseId1","courseId2"],"_id":"u7jQz0LjB2psvJiu"}

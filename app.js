@@ -38,6 +38,8 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 
 
 // Middleware (Week 2)
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // For parsing application/json
+
 
 // Session (Week 8)
 app.use(session({

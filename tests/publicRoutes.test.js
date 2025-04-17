@@ -1,15 +1,13 @@
-// tests/publicRoutes.test.js
-// Based on Week 6: Mocha + Chai HTTP
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../app'); // Assumes app exports the Express instance
+const app = require('../app'); // Assuming app.js is exporting your Express instance
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-// Sample public route tests
 describe('Public Routes', () => {
-
+  
+  // Test Home Page
   it('should load the home page', (done) => {
     chai.request(app)
       .get('/')
@@ -20,7 +18,8 @@ describe('Public Routes', () => {
       });
   });
 
-  it('should load the course list page', (done) => {
+  // Test Courses Page
+  it('should load the courses page', (done) => {
     chai.request(app)
       .get('/courses')
       .end((err, res) => {
@@ -30,6 +29,7 @@ describe('Public Routes', () => {
       });
   });
 
+  // Test 404 for an unknown page
   it('should return 404 for unknown pages', (done) => {
     chai.request(app)
       .get('/not-a-real-page')
